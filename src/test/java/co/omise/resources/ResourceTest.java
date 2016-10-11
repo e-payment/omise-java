@@ -1,6 +1,7 @@
 package co.omise.resources;
 
 import co.omise.OmiseTest;
+import co.omise.models.OmiseException;
 import co.omise.models.Ordering;
 import co.omise.models.ScopedList;
 import co.omise.testutils.TestInterceptor;
@@ -29,7 +30,7 @@ public class ResourceTest extends OmiseTest {
     }
 
     @Test
-    public void testListOptions() throws IOException {
+    public void testListOptions() throws IOException, OmiseException {
         DateTime from = new DateTime(1964, 1, 2, 12, 22, DateTimeZone.UTC);
         DateTime to = new DateTime(1987, 2, 1, 19, 54, DateTimeZone.UTC);
 
@@ -51,8 +52,7 @@ public class ResourceTest extends OmiseTest {
 
         Request request = lastRequest();
         for (Map.Entry<String, String> entry : expects.entrySet()) {
-            String value = request.url().queryParameterValues(entry.getKey()).get(0);
-            assertEquals(entry.getValue(), value);
+            assertEquals(entry.getValue(), request.url().queryParameter(entry.getKey()));
         }
     }
 
